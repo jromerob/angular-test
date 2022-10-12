@@ -13,6 +13,8 @@ const LIST_BOOKS: Book[] = [
   { author: 'uno', isbn: '87583274', name: 'monbre1', price: 5, amount: 2 },
 ];
 
+let storage = {};
+
 describe('Book Service', () => {
   let service: BookService;
   let httpMock: HttpTestingController;
@@ -27,6 +29,10 @@ describe('Book Service', () => {
   beforeEach(() => {
     service = TestBed.inject(BookService);
     httpMock = TestBed.inject(HttpTestingController);
+    //PARA NO usar el localstorage real usamos un spyOn al hacerlo en el beforeeach se establece para cada test
+    spyOn(localStorage, 'getItem').and.callFake((key: string) => {
+      return storage[key] ? storage[key] : null;
+    });
   });
 
   afterEach(() => {
@@ -47,14 +53,6 @@ describe('Book Service', () => {
     // resuelve la request retornando un valor
     req.flush(LIST_BOOKS);
   });
-
-  // public getBooksFromCart(): Book[] {
-  //   let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
-  //   if (listBook === null) {
-  //     listBook = [];
-  //   }
-  //   return listBook;
-  // }
 
   it('getBooksFromCart retorana array vacio cuando localstorage esta vacío', () => {
     const libros = service.getBooksFromCart();
