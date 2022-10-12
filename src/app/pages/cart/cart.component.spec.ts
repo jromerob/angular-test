@@ -10,7 +10,7 @@ const LIST_BOOKS: Book[] = [
   { author: 'uno', isbn: '87583274', name: 'monbre1', price: 5, amount: 2 },
 ];
 
-fdescribe('cart component', () => {
+describe('cart component', () => {
   let component: CartComponent;
   let fixture: ComponentFixture<CartComponent>;
 
@@ -28,7 +28,7 @@ fdescribe('cart component', () => {
     fixture.detectChanges(); // obliga al paso por el ngoninit
   });
 
-  fit('Debería crear componente', () => {
+  it('Debería crear componente', () => {
     expect(component).toBeTruthy();
   });
 
@@ -62,7 +62,7 @@ fdescribe('cart component', () => {
     expect(book.amount).toBe(13);
   });
 
-  it('decrementa correctamente', () => {
+  xit('decrementa correctamente', () => {
     const action = 'minus';
     const book = {
       author: 'tres',
