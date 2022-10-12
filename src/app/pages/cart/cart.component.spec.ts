@@ -62,7 +62,7 @@ describe('cart component', () => {
     expect(book.amount).toBe(13);
   });
 
-  xit('decrementa correctamente', () => {
+  it('decrementa correctamente', () => {
     const action = 'minus';
     const book = {
       author: 'tres',
