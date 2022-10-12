@@ -11,6 +11,10 @@ const LIST_BOOKS: Book[] = [
   { author: 'uno', isbn: '87583274', name: 'monbre1', price: 5, amount: 2 },
 ];
 
+const bookServiceMock = {
+  getBooks: () => of(LIST_BOOKS),
+};
+
 describe('Home component', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
@@ -19,7 +23,10 @@ describe('Home component', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       declarations: [HomeComponent],
-      providers: [BookService],
+      providers: [
+        //BookService
+        { provide: BookService, useValue: bookServiceMock },
+      ],
     }).compileComponents();
   });
 
@@ -35,9 +42,9 @@ describe('Home component', () => {
 
   it('obtiene libros, subscripción', () => {
     const bookService = fixture.debugElement.injector.get(BookService);
-    const spy1 = spyOn(bookService, 'getBooks').and.returnValue(of(LIST_BOOKS));
+    // const spy1 = spyOn(bookService, 'getBooks').and.returnValue(of(LIST_BOOKS));
     component.getBooks();
-    expect(spy1).toHaveBeenCalled();
+    // expect(spy1).toHaveBeenCalled();
     expect(component.listBook.length).toBe(3);
     expect(component.listBook[0].isbn).toBe('87583274');
   });
