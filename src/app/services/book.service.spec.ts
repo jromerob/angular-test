@@ -85,26 +85,6 @@ describe('Book Service', () => {
     expect(libros.length).toBe(0);
   });
 
-  // public addBookToCart(book: Book) {
-  //   let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
-  //   if (listBook === null) { // Create a list with the book
-  //     book.amount = 1;
-  //     listBook = [ book ];
-  //   } else {
-  //     const index = listBook.findIndex((item: Book) => {
-  //       return book.id === item.id;
-  //     });
-  //     if (index !== -1) { // Update the quantity in the existing book
-  //       listBook[index].amount++;
-  //     } else {
-  //       book.amount = 1;
-  //       listBook.push(book);
-  //     }
-  //   }
-  //   localStorage.setItem('listCartBook', JSON.stringify(listBook));
-  //   this._toastSuccess(book);
-  // }
-
   it('Añade libro cuando no existe lista', () => {
     const spy1 = spyOn(Swal, 'mixin').and.callFake(() => {
       return { fire: () => {} } as any;
@@ -142,5 +122,19 @@ describe('Book Service', () => {
     expect(listBook.length).toBe(2);
     expect(spy1).toHaveBeenCalled();
     listBook = service.getBooksFromCart();
+  });
+
+  it('Elimina libro correctamente del carro ', () => {
+    const spy1 = spyOn(Swal, 'mixin').and.callFake(() => {
+      return { fire: () => {} } as any;
+    });
+    let listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(0);
+    service.addBookToCart(book);
+    listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(1);
+    service.removeBooksFromCart();
+    listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(0);
   });
 });
