@@ -28,7 +28,7 @@ describe('cart component', () => {
     fixture.detectChanges(); // obliga al paso por el ngoninit
   });
 
-  it('Debería crear componente', () => {
+  fit('Debería crear componente', () => {
     expect(component).toBeTruthy();
   });
 

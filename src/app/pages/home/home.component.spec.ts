@@ -40,7 +40,7 @@ describe('Home component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('obtiene libros, subscripción', () => {
+  fit('obtiene libros, subscripción', () => {
     const bookService = fixture.debugElement.injector.get(BookService);
     // const spy1 = spyOn(bookService, 'getBooks').and.returnValue(of(LIST_BOOKS));
     component.getBooks();
