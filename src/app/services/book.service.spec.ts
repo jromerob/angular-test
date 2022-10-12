@@ -37,11 +37,6 @@ describe('Book Service', () => {
     expect(service).toBeTruthy();
   });
 
-  // public getBooks(): Observable<Book[]> {
-  //   const url: string = environment.API_REST_URL + `/book`;
-  //   return this._httpClient.get<Book[]>(url);
-  // }
-
   it('devuelve lista de libros con un get', () => {
     service.getBooks().subscribe((books: Book[]) => {
       expect(books).toEqual(LIST_BOOKS);
@@ -51,5 +46,18 @@ describe('Book Service', () => {
     expect(req.request.method).toBe('GET');
     // resuelve la request retornando un valor
     req.flush(LIST_BOOKS);
+  });
+
+  // public getBooksFromCart(): Book[] {
+  //   let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
+  //   if (listBook === null) {
+  //     listBook = [];
+  //   }
+  //   return listBook;
+  // }
+
+  it('getBooksFromCart retorana array vacio cuando localstorage esta vacío', () => {
+    const libros = service.getBooksFromCart();
+    expect(libros.length).toBe(0);
   });
 });
