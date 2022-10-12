@@ -4,6 +4,7 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 import { Book } from '../models/book.model';
 import { BookService } from './book.service';
 
@@ -14,6 +15,24 @@ const LIST_BOOKS: Book[] = [
 ];
 
 let storage = {};
+
+const book: Book = {
+  id: '11111',
+  author: 'dos',
+  isbn: '87583274',
+  name: 'monbre2',
+  price: 25,
+  amount: 1,
+};
+
+const book2 = {
+  id: '12221',
+  author: 'otro',
+  isbn: '87583273334',
+  name: 'monbre22',
+  price: 2,
+  amount: 1,
+};
 
 describe('Book Service', () => {
   let service: BookService;
@@ -29,10 +48,17 @@ describe('Book Service', () => {
   beforeEach(() => {
     service = TestBed.inject(BookService);
     httpMock = TestBed.inject(HttpTestingController);
+    //vacia el storage antes de cada test
+    storage = {};
     //PARA NO usar el localstorage real usamos un spyOn al hacerlo en el beforeeach se establece para cada test
     spyOn(localStorage, 'getItem').and.callFake((key: string) => {
       return storage[key] ? storage[key] : null;
     });
+    spyOn(localStorage, 'setItem').and.callFake(
+      (key: string, value: string) => {
+        return (storage[key] = value);
+      }
+    );
   });
 
   afterEach(() => {
@@ -57,5 +83,64 @@ describe('Book Service', () => {
   it('getBooksFromCart retorana array vacio cuando localstorage esta vacío', () => {
     const libros = service.getBooksFromCart();
     expect(libros.length).toBe(0);
+  });
+
+  // public addBookToCart(book: Book) {
+  //   let listBook: Book[] = JSON.parse(localStorage.getItem('listCartBook'));
+  //   if (listBook === null) { // Create a list with the book
+  //     book.amount = 1;
+  //     listBook = [ book ];
+  //   } else {
+  //     const index = listBook.findIndex((item: Book) => {
+  //       return book.id === item.id;
+  //     });
+  //     if (index !== -1) { // Update the quantity in the existing book
+  //       listBook[index].amount++;
+  //     } else {
+  //       book.amount = 1;
+  //       listBook.push(book);
+  //     }
+  //   }
+  //   localStorage.setItem('listCartBook', JSON.stringify(listBook));
+  //   this._toastSuccess(book);
+  // }
+
+  it('Añade libro cuando no existe lista', () => {
+    const spy1 = spyOn(Swal, 'mixin').and.callFake(() => {
+      return { fire: () => {} } as any;
+    });
+    let listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(0);
+    service.addBookToCart(book);
+    listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(1);
+    expect(spy1).toHaveBeenCalled();
+  });
+
+  it('Añade libro cuando ya existe ', () => {
+    const spy1 = spyOn(Swal, 'mixin').and.callFake(() => {
+      return { fire: () => {} } as any;
+    });
+    let listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(0);
+    service.addBookToCart(book);
+    listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(1);
+    expect(spy1).toHaveBeenCalled();
+    service.addBookToCart(book);
+  });
+
+  it('Añade libro nuevo a carro con libros ', () => {
+    const spy1 = spyOn(Swal, 'mixin').and.callFake(() => {
+      return { fire: () => {} } as any;
+    });
+    let listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(0);
+    service.addBookToCart(book);
+    service.addBookToCart(book2);
+    listBook = service.getBooksFromCart();
+    expect(listBook.length).toBe(2);
+    expect(spy1).toHaveBeenCalled();
+    listBook = service.getBooksFromCart();
   });
 });
