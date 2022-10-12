@@ -10,7 +10,7 @@ const LIST_BOOKS: Book[] = [
   { author: 'uno', isbn: '87583274', name: 'monbre1', price: 5, amount: 2 },
 ];
 
-describe('cart component', () => {
+fdescribe('cart component', () => {
   let component: CartComponent;
   let fixture: ComponentFixture<CartComponent>;
 
