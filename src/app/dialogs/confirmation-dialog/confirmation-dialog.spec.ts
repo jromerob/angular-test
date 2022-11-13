@@ -29,13 +29,6 @@ describe('confirmation dialog', () => {
     expect(component).toBeTruthy();
   });
 
-  // public onConfirm(): void {
-  //   this.dialogRef.close(true);
-  // }
-
-  // public onDismiss(): void {
-  //   this.dialogRef.close(false);
-  // }
 
   it('on confirm send true', () => {
     const service = TestBed.inject(MatDialogRef);
@@ -50,4 +43,5 @@ describe('confirmation dialog', () => {
     component.onDismiss();
     expect(spy).toHaveBeenCalledWith(false);
   });
+
 });

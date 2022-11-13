@@ -1,7 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
+import { By } from '@angular/platform-browser';
 import { of } from 'rxjs';
 import { Book } from '../../models/book.model';
 import { BookService } from '../../services/book.service';
@@ -137,5 +138,24 @@ describe('Cart component', () => {
 
     expect(component.listCartBook.length).toBe(0);
     expect(spy1).toHaveBeenCalled();
+  });
+
+
+  it('No debe mostrar texto carro vacío si hay elementos', () => {
+    component.listCartBook=listBook;
+    fixture.detectChanges(); // improtante al hacer cambios y luego evaluar elementos de presentación
+    const debugElement: DebugElement=fixture.debugElement.query(By.css("#cartEmptyText"))
+    expect(debugElement).toBeFalsy()
+  });
+
+  it('Debe mostrar texto carro vacío si  no hay elementos', () => {
+    component.listCartBook=[];
+    fixture.detectChanges(); // improtante al hacer cambios y luego evaluar elementos de presentación
+    const debugElement: DebugElement=fixture.debugElement.query(By.css("#cartEmptyText"))
+    expect(debugElement).toBeTruthy()
+    if (debugElement){
+      const html=debugElement.nativeElement;
+      expect(html.innerHTML).toContain("The cart is empty")
+    }
   });
 });
