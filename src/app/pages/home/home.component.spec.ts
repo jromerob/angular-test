@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Pipe, PipeTransform } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -38,6 +39,7 @@ describe('Home component', () => {
       providers: [
         //BookService
         { provide: BookService, useValue: bookServiceMock },
+        { provide: Document, useExisting: DOCUMENT },
       ],
     }).compileComponents();
   });
@@ -60,4 +62,14 @@ describe('Home component', () => {
     expect(component.listBook.length).toBe(3);
     expect(component.listBook[0].isbn).toBe('87583274');
   });
+
+  it('test document',()=>{
+
+    const documentService=TestBed.inject(Document)
+    const  myWindow=documentService.defaultView // objeto window global
+    const spy= spyOn(myWindow,'alert').and.callFake(()=>null)
+    component.ngOnInit();
+    expect(spy).toHaveBeenCalled();
+
+  })
 });
